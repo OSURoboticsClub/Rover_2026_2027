@@ -216,6 +216,7 @@ This assumes your copy of the rover repo is in your home directory. If it is not
 Currently, connecting to the rover requires you to have a static IP address, in the range `192.168.1.x`, with subnet mask `255.255.255.0`. Addresses `192.168.1.10-30` are reserved for the rover, groundstation tower, and comms equipment.
 
 Before you can connect to the rover with Zenoh, you will need to start a Zenoh router. To do this use run `ros2 run rmw_zenoh_cpp rmw_zenohd`.
+
 ---
 
 ## Miscellaneous Notes and Stuff
