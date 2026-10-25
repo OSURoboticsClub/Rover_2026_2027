@@ -1,0 +1,124 @@
+import os
+
+from ament_index_python.packages import get_package_share_directory
+
+from launch import LaunchDescription
+from launch_ros.actions import Node
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
+from launch.conditions import IfCondition
+from launch.substitutions import PythonExpression
+
+
+# LAUNCH: for testing without another odom source
+    # ros2 launch nav_autonomy mapping_launch.py vo:=true viz:=true   
+
+# rtabmap core node TF notes
+    # Required
+        # odom -> base_link
+        # base_link -> ... -> <camera_name>_color_optical_frame
+
+def generate_launch_description():
+    package_name='nav_autonomy'
+    pkg_share = get_package_share_directory(package_name)
+
+    parameters = [os.path.join(pkg_share, 'config', 'rtab_params.yaml')]
+
+    remappings=[
+        ('rgb/image', '/camera/d455/color/image_raw'),
+        ('rgb/camera_info', '/camera/d455/color/camera_info'),
+        ('depth/image', '/camera/d455/aligned_depth_to_color/image_raw'),
+        ('gps/fix', 'gps/filtered'),     #gps/filtered
+        ('global_pose', 'global_ignored'),     #global_pose
+        ]
+        
+    config_rviz = os.path.join(
+        pkg_share, 'config', 'depth_nav.rviz'
+    )
+
+    return LaunchDescription([
+
+        # Launch arguments
+        DeclareLaunchArgument('viz',        default_value='false',  description='Launch RTAB-Map UI and RVIZ.'),
+        DeclareLaunchArgument('vo',       default_value='false', description='Visual Odometry Node for testing'),
+        DeclareLaunchArgument('rviz_cfg',   default_value=config_rviz,  description='Configuration path of rviz2.'),
+        DeclareLaunchArgument('lidar', default_value='false', description='Use UniLidar instead of camera point cloud'),
+
+        # Launch visual odom for testing
+        Node(
+            package='rtabmap_odom', executable='rgbd_odometry', output='screen',
+            condition=IfCondition(LaunchConfiguration("vo")),
+            parameters=parameters,
+            remappings=remappings),
+ 
+        # Core SLAM node
+        # Node(
+        #     package='rtabmap_slam', executable='rtabmap', output='screen',
+        #     parameters=parameters,
+        #     remappings=remappings,
+        #     arguments=['-d']), # This will delete the previous database (~/.ros/rtabmap.db)
+
+        # Converted global pose publisher
+        # Node(
+        #     package='nav_autonomy', 
+        #     executable='map_pose_publisher'),
+
+        # Visualization:
+        Node(
+            package='rtabmap_viz', executable='rtabmap_viz', output='screen',
+            condition=IfCondition(LaunchConfiguration("viz")),
+            parameters=parameters,
+            remappings=remappings),
+
+        # Custom point cloud publishing for local map
+        Node(
+            package='rtabmap_util', executable='point_cloud_xyz', output='screen',
+            condition=IfCondition(
+                PythonExpression([
+                    "'", LaunchConfiguration('lidar'), "'.lower() == 'false'"
+                ])
+            ),
+            parameters=[{'min_depth': 0.4,
+                         'max_depth': 6.0, #3.0,
+
+                         'approx_sync': True,
+                         'sync_queue_size': 2,
+                         'approx_sync_max_interval': 0.05,
+
+                         'noise_filter_radius': 0.1,
+                         'noise_filtering_min_neighbors': 5,
+                         'filter_nans': True,
+
+                         'voxel_size': .05, 
+                        }],
+            remappings=[('depth/image', '/camera/d455/depth/image_rect_raw'),
+                        ('depth/camera_info', '/camera/d455/depth/camera_info'),
+                        ('cloud', '/camera/cloud')]),
+        Node(
+            package='rtabmap_util', executable='obstacles_detection', output='screen',
+            parameters=[{'frame_id': 'rover_base_origin'}],
+            remappings=[('cloud', 
+                            PythonExpression([
+                                "'/unilidar/cloud' if '",
+                                LaunchConfiguration('lidar'),
+                                "'.lower() == 'true' else '/camera/cloud'"
+                            ])
+                        ),
+                        ('obstacles', '/camera/obstacles'),
+                        ('ground', '/camera/ground')]),
+
+        Node(
+            package='rviz2', executable='rviz2', name="rviz2", output='screen',
+            condition=IfCondition(LaunchConfiguration("viz")),
+            arguments=[["-d"], [LaunchConfiguration("rviz_cfg")]]),
+            # RViz Subscribed Topics
+                #   /map
+                #   /map_updates
+                #   /mapData
+                #   /mapGraph
+                #   /odom_last_frame
+                #   /odom_local_map
+                #   /initialpose
+                #   /goal_pose
+                #   /clicked_point
+    ])

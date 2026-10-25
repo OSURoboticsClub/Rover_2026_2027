@@ -1,0 +1,18 @@
+# Local agent and IDE metadata
+/.agents/
+/.codex/
+/.idea/
+.vscode/
+venv/
+
+# Generated build outputs
+build/
+install/
+log/
+
+#Unitree generated build
+software/lib/unitree_lidar_sdk/bin/
+software/lib/unitree_lidar_sdk/examples/CMakeCache.txt
+software/lib/unitree_lidar_sdk/examples/CMakeFiles/
+software/lib/unitree_lidar_sdk/examples/Makefile
+software/lib/unitree_lidar_sdk/examples/cmake_install.cmake

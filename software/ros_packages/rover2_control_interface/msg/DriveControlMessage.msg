@@ -1,0 +1,4 @@
+bool first_motor_direction
+bool first_motor_sleep
+uint16 first_motor_speed
+

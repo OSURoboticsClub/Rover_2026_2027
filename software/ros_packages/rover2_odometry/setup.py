@@ -1,0 +1,34 @@
+from setuptools import setup
+from glob import glob
+
+package_name = 'rover2_odometry'
+
+setup(
+    name=package_name,
+    version='0.0.0',
+    packages=[package_name],
+    data_files=[
+        ('share/ament_index/resource_index/packages',
+            ['resource/' + package_name]),
+        ('share/' + package_name, ['package.xml']),
+        ('share/' + package_name, glob('launch/*launch.[pxy][yma]*'))
+    ],
+    install_requires=['setuptools'],
+    zip_safe=True,
+    maintainer='root',
+    maintainer_email='hakkilab@oregonstate.edu',
+    description='TODO: Package description',
+    license='TODO: License declaration',
+    tests_require=['pytest'],
+    entry_points={
+        'console_scripts': [
+            'odometry = rover2_odometry.odometry:main',
+            'imu = rover2_odometry.imu:main',
+            'simple_position = rover2_odometry.simple_position:main',
+            'scimech_sensors = rover2_odometry.scimech_sensors:main',
+            'odrive_can_info = rover2_odometry.odrive_can_info:main',
+            'GPSNode = rover2_odometry.GPSNode:main',
+            'RTCMSerialNode = rover2_odometry.RTCMSerialNode:main',
+        ],
+    },
+)
