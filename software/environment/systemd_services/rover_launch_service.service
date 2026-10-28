@@ -6,11 +6,11 @@ Requires=can_launch_service.service
 [Service]
 User=makemorerobot
 Group=makemorerobot
-WorkingDirectory=/home/makemorerobot/Rover_2023_2024/software
+WorkingDirectory=/home/makemorerobot/Rover_2026_2027/software
 
 ExecStartPre=/bin/bash -c 'until ip link show can0 >/dev/null 2>&1; do sleep 1; done'
 
-ExecStart=/home/makemorerobot/Rover_2023_2024/software/startRover.sh
+ExecStart=/home/makemorerobot/Rover_2026_2027/software/startRover.sh
 
 RemainAfterExit=no
 Restart=on-failure

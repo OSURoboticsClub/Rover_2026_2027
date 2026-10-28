@@ -7,8 +7,8 @@ After=systemd-udev-settle.service
 Type=oneshot
 User=root
 Group=root
-WorkingDirectory=/home/makemorerobot/Rover_2023_2024/software
-ExecStart= /home/makemorerobot/Rover_2023_2024/software/startCan.sh
+WorkingDirectory=/home/makemorerobot/Rover_2026_2027/software
+ExecStart= /home/makemorerobot/Rover_2026_2027/software/startCan.sh
 RemainAfterExit=no
 
 [Install]
