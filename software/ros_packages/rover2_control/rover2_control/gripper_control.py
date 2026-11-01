@@ -556,7 +556,7 @@ class GripperCanControl(Node):
 
                         self.bus.send(can.Message(
                             arbitration_id=(self.node_id << 5 | 0x04), 
-                            data=struct.pack('<BHBf', 1, 403,0, self.vel_ramp_rate), #403 - 0.6.10, 396 - 0.6.9-1
+                            data=struct.pack('<BHBf', 1, 398,0, self.vel_ramp_rate), # 398 - 0.6.12 403 - 0.6.10, 396 - 0.6.9-1
                             is_extended_id=False
                         ))
                         self.mode = 2
@@ -614,22 +614,22 @@ class GripperCanControl(Node):
                             data=struct.pack('<ff', self.vel_limit, self.current_limit),
                             is_extended_id = False
                         ))
-                        #set bandwidth
+                        #set input_filter_bandwidth 409 0.6.12
                         self.bus.send(can.Message(
                             arbitration_id=(self.node_id << 5 | 0x04), 
-                            data=struct.pack('<BHBf', 1, 414,0, self.filter_bandwidth), 
+                            data=struct.pack('<BHBf', 1, 409,0, self.filter_bandwidth), 
                             is_extended_id=False
                         ))
-                        #set feedforward scale 0.6.10 vel = 252 torq = 253
+                        #set feedforward scale 0.6.10 vel = 252 torq = 253 0.6.12 vel: 292 torque: 293
                         self.bus.send(can.Message(
                             arbitration_id=(self.node_id << 5 | 0x04), 
-                            data=struct.pack('<BHBI', 1, 252,0, self.vel_scale),
+                            data=struct.pack('<BHBI', 1, 292,0, self.vel_scale),
                             is_extended_id=False
                         ))
 
                         self.bus.send(can.Message(
                             arbitration_id=(self.node_id << 5 | 0x04), 
-                            data=struct.pack('<BHBI', 1, 253,0, self.torq_scale), 
+                            data=struct.pack('<BHBI', 1, 293,0, self.torq_scale), 
                             is_extended_id=False
                         ))
                         self.mode = 4
