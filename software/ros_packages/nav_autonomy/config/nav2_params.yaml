@@ -27,7 +27,7 @@ bt_navigator:
       - nav2_goal_updated_condition_bt_node
       - nav2_globally_updated_goal_condition_bt_node
       - nav2_is_path_valid_condition_bt_node
-      - nav2_initial_pose_received_condition_bt_node
+      #- nav2_initial_pose_received_condition_bt_node
       - nav2_reinitialize_global_localization_service_bt_node
       - nav2_rate_controller_bt_node
       - nav2_distance_controller_bt_node
@@ -60,16 +60,16 @@ bt_navigator:
       - nav2_drive_on_heading_cancel_bt_node
       - nav2_is_battery_charging_condition_bt_node
 
-bt_navigator_navigate_through_poses_rclcpp_node:
-  ros__parameters:
-    use_sim_time: False
-    robot_base_frame: rover_base_origin
+#bt_navigator_navigate_through_poses_rclcpp_node:
+ # ros__parameters:
+ #   use_sim_time: False
+ #   robot_base_frame: rover_base_origin
     
 
-bt_navigator_navigate_to_pose_rclcpp_node:
-  ros__parameters:
-    use_sim_time: False
-    robot_base_frame: rover_base_origin
+#bt_navigator_navigate_to_pose_rclcpp_node:
+ # ros__parameters:
+  #  use_sim_time: False
+   # robot_base_frame: rover_base_origin
 
 
 controller_server:
@@ -82,7 +82,7 @@ controller_server:
     min_y_velocity_threshold: 0.0  # Rover cannot strafe
     min_theta_velocity_threshold: 0.001
     failure_tolerance: 0.3
-    progress_checker_plugin: "progress_checker"
+    progress_checker_plugins: ["progress_checker"] 
     goal_checker_plugins: ["general_goal_checker"] # "precise_goal_checker"
     controller_plugins: ["FollowPath"]
 

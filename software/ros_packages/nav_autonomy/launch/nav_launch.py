@@ -23,7 +23,7 @@ def generate_launch_description():
         launch_arguments={
             'use_sim_time': use_sim_time,
             'autostart': 'true',
-            'use_robot_state_pub': 'false',
+            #'use_robot_state_pub': 'false',
             'params_file': nav2_params
         }.items()
     )
