@@ -11,16 +11,16 @@ def generate_launch_description():
     }
 
     return LaunchDescription([
-        Node(
-            package='rover2_odometry',
-            executable='imu08x',
-            name='imu08x',
-            parameters=[{
-                'serial_path':'/dev/ttyUSB1', # set this paramater to an empty string for I2C
-                'magnetic_declination':14.37 # Magnetic declination in degrees
-            }],
-            **config
-        ),
+       # Node(
+       #     package='rover2_odometry',
+       #     executable='imu08x',
+       #     name='imu08x',
+       #     parameters=[{
+       #         'serial_path':'/dev/ttyUSB1', # set this paramater to an empty string for I2C
+       #         'magnetic_declination':14.37 # Magnetic declination in degrees
+       #     }],
+       #     **config
+       # ),
         # Node(
         #      package='rover2_odometry',
         #      executable='scimech_sensors',

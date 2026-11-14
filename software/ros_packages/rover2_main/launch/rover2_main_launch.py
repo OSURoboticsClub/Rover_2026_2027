@@ -261,13 +261,15 @@ def generate_launch_description():
     # Launch description
     # -------------------------
     return LaunchDescription([
+        arm_arg,
+        auton_arg,
+        lidar_arg,
+        attachment_arg,
+        
         TimerAction(            # Delay so autolaunch works
             period=3.0,
             actions=[
-                arm_arg,
-                auton_arg,
-                lidar_arg,
-                attachment_arg,
+
 
                 ros2_control_node,
                 robot_state_publisher_node,
