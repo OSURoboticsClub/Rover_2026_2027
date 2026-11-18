@@ -329,7 +329,7 @@ def generate_launch_description():
         launch_muxing_arg,
         launch_driver_arg,
 
-        #realsense_launch_nav,
+        realsense_launch_nav,
         chassis_right_cam_node,
         chassis_left_cam_node,
 #        birds_eye_cam_node,
